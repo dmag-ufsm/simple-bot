@@ -11,6 +11,7 @@ import sys
 class JSONHandler(PatternMatchingEventHandler):
     patterns = ["*/game_status.json"]
 
+    # takes action when game_status.json updated or created
     @staticmethod
     def process(event):
         print(event.src_path, event.event_type)
@@ -25,7 +26,7 @@ class JSONHandler(PatternMatchingEventHandler):
         self.process(event)
 
 
-# open json file in read mode
+# open json file
 def read_json(path, player_id):
     with open(path) as json_file:
         data = json.load(json_file)
