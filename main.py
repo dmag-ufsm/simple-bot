@@ -14,6 +14,7 @@ class BotInputHandler(PatternMatchingEventHandler):
     patterns = ["*/game_status.json"]
 
     def __init__(self, cards, weights):
+        super().__init__()
         self.cards_data = cards
         self.weights_data = weights
 
