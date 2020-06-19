@@ -1,7 +1,7 @@
 {
     "game": {
         "clockwise": true,
-        "era": 1,
+        "era": 0,
         "turn": 1
     },
     "players": {

@@ -4,6 +4,7 @@ import json
 import time
 import pandas
 import math
+import bot
 
 # from watchdog.observers import Observer
 # BugFix use this if the same event is being fired multiple times when using Observer
@@ -17,16 +18,16 @@ class BotInputHandler(PatternMatchingEventHandler):
 
     def __init__(self, cards, weights):
         super().__init__()
-        self.cards_data = cards
+        self.card_data = cards
         self.weights_data = weights
 
     # takes action when game_status.json updated or created
-    @staticmethod
-    def process(event):
+    def process(self, event):
         print(event.src_path, event.event_type)
         game_state, player_state = read_json('./game_info/game_status.json', '0')
-        print(game_state)
-        print(player_state)
+
+        # # calls the bot module to make some action
+        bot.play(self.card_data, self.weights_data, game_state, player_state)
 
     def on_modified(self, event):
         self.process(event)
@@ -55,22 +56,23 @@ def transform_card_names(data):
 
 # transformation by removing '*' and replacing nan with 1
 def transform_cards_weight(data):
-    for index in range(1, 79):
-        weight = data['Military Strategy'][index]
+    weights = data.loc[:, 'card_weight']
+
+    for i in range(0, len(weights) - 1):
+        weight = data.loc[i, 'card_weight']
 
         if isinstance(weight, str):
             weight = weight.replace('*', '')
-
         elif math.isnan(weight):
             weight = 1
 
-        data['Military Strategy'][index] = weight
+        data.loc[i, 'card_weight'] = weight
 
 
 if __name__ == '__main__':
 
     cards_data = pandas.read_csv('./data/cards.csv')
-    weight_cards_data = pandas.read_csv('./data/weightPerCard.csv')
+    weight_cards_data = pandas.read_csv('./data/weights_military.csv')
 
     transform_card_names(cards_data)
     transform_cards_weight(weight_cards_data)
