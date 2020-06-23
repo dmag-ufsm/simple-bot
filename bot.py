@@ -11,14 +11,7 @@ def card_name_to_id(cards, hand):
     return hand
 
 
-# return a card and the action taken
-def make_decision(weights, game_state, player_state):
-    # weights_age = weights.loc[weights["age"] == game_state["era"]]
-    print(weights)
-
-
 def play(cards, weights, game_state, player_state):
-    # player_hand = player_state["cards_hand"]
-    # player_hand_playable = player_state["cards_playable"]
-
-    make_decision(weights, game_state, player_state)
+    print('alguma coisa')
+    print(player_state)
+    print(game_state)

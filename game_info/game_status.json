@@ -2,7 +2,7 @@
     "game": {
         "clockwise": true,
         "era": 0,
-        "turn": 1
+        "turn": 0
     },
     "players": {
         "0": {
