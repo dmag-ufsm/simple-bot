@@ -24,10 +24,10 @@ class BotInputHandler(PatternMatchingEventHandler):
     # takes action when game_status.json updated or created
     def process(self, event):
         print(event.src_path, event.event_type)
-        game_state, player_state = read_json('./game_info/game_status.json', '0')
+        game_state, players_state = read_json('./game_info/game_status.json')
 
         # # calls the bot module to make some action
-        bot.play(self.card_data, self.weights_data, game_state, player_state)
+        bot.play(self.card_data, self.weights_data, game_state, players_state, 0)
 
     def on_modified(self, event):
         self.process(event)
@@ -37,14 +37,14 @@ class BotInputHandler(PatternMatchingEventHandler):
 
 
 # open json file
-def read_json(path, player_id):
+def read_json(path):
     with open(path) as json_file:
         data = json.load(json_file)
 
     game_status = data['game']
-    player_status = data['players'][player_id]
+    players_status = data['players']
 
-    return game_status, player_status
+    return game_status, players_status
 
 
 # remove card names underline

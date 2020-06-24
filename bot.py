@@ -1,17 +1,35 @@
+import strategies
 
 
-# useful for neural network inputs
-def card_name_to_id(cards, hand):
+# return dict with card names and ids
+def get_hand_data(cards, hand):
+    card_hand_data = []
 
     for index in range(len(hand)):
         selected_card = cards.loc[cards["card_name"] == hand[index]]
         card_id = selected_card["card_id"].values[0]
-        hand[index] = card_id
 
-    return hand
+        card_dict = {
+            "id": card_id,
+            "card_name": hand[index],
+            "weight": 0
+        }
+
+        card_hand_data.append(card_dict)
+
+    return card_hand_data
 
 
-def play(cards, weights, game_state, player_state):
-    print('alguma coisa')
-    print(player_state)
+def set_cards_weights(hand, game_state, players_state):
+    for card in hand:
+        # card["weight"] = strategies.card_weight_map[card["id"]](players_state, game_state)
+        print(card)
+
+
+def play(cards, weights, game_state, players_state, player_id):
+    print(players_state)
     print(game_state)
+
+    card_hand_data = get_hand_data(cards, players_state[str(player_id)]['cards_hand'])
+    set_cards_weights(card_hand_data, game_state, players_state)
+
