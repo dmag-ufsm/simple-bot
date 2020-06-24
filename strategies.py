@@ -13,7 +13,6 @@ def find_card(player_state, card):
     is_in_hand = False
 
     for i in range(size):
-        print(player_state["cards_hand"][i])
         if player_state["cards_hand"][i] == card:
             is_in_hand = True
 
@@ -57,6 +56,22 @@ def qt_military_structure(player_state):
     count_military_structure = count_cards_played_matchs(player_state, military_structure)
 
     return count_military_structure
+
+
+def qt_trading_post(player_state):
+    east_trading_post_card = "East Trading Post"
+    west_trading_post_card = "West Trading Post"
+    count_trading_post = 0
+
+    east_trading_post_card = find_card(player_state, east_trading_post_card)
+    west_trading_post_card = find_card(player_state, west_trading_post_card)
+
+    if east_trading_post_card:
+        count_trading_post += 1
+    if west_trading_post_card:
+        count_trading_post += 1
+
+    return count_trading_post
 
 
 def lumber_yard(player_state, game_state):
@@ -438,27 +453,22 @@ def press(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def altar(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def theater(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def pawnshop(player_state, game_state):
     return 2
 
 
-## TODO: implement rule of WONDERS
 def baths(player_state, game_state):
     return 2
 
 
-## TODO: implement rule of WONDERS
 def temple(player_state, game_state):
     count_civilian_structure = qt_civilian_structure(player_state)
 
@@ -468,7 +478,6 @@ def temple(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def courthouse(player_state, game_state):
     count_civilian_structure = qt_civilian_structure(player_state)
 
@@ -478,7 +487,6 @@ def courthouse(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def statue(player_state, game_state):
     count_civilian_structure = qt_civilian_structure(player_state)
 
@@ -488,7 +496,6 @@ def statue(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def aqueduct(player_state, game_state):
     count_civilian_structure = qt_civilian_structure(player_state)
 
@@ -498,58 +505,146 @@ def aqueduct(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def gardens(player_state, game_state):
     return 3
 
 
-## TODO: implement rule of WONDERS
 def town_hall(player_state, game_state):
     return 4
 
 
-## TODO: implement rule of WONDERS
 def senate(player_state, game_state):
     return 4
 
 
-## TODO: implement rule of WONDERS
 def pantheon(player_state, game_state):
     return 5
 
 
-## TODO: implement rule of WONDERS
 def palace(player_state, game_state):
     return 5
 
 
-## TODO: implement rule of WONDERS
 def tavern(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
 ## TODO: implement rule [neighboor]
 def east_trading_post(player_state, game_state):
+    west_trading_post_card = "West Trading Post"
+    marketplace_card = "Marketplace"
+
+    west_trading_post_card = find_card(player_state, west_trading_post_card)
+    marketplace_card = find_card(player_state, marketplace_card)
+
+    count_trading_post = qt_trading_post(player_state)
+
+    # Wonder: EPHESOS B(11) regular supply of money
+    if player_state["wonder_id"] == 11:
+        return 3
+
+    # Wonder: ALEXANDRIA B(12)
+    if player_state["wonder_id"] == 12:
+        if west_trading_post_card & marketplace_card:
+            return 1
+        elif west_trading_post_card | marketplace_card:
+            return 4
+        else:
+            return 4
+
+    # Wonder: GIZA B(7)
+    if player_state["wonder_id"] == 7:
+        if count_trading_post < 1:
+            return 4
+
+    # Wonder:  OLYMPIA A(2) Trading Post continues a good card for military because you need a lot of brown resources
+    if player_state["wonder_id"] == 2:
+        return 4
+
+    # Wonder: HALIKARNASSOS B(13) Pick the Trading Post is never a bad move
+    if player_state["wonder_id"] == 13:
+        return 4
+
     return 1
 
 
-## TODO: implement rule of WONDERS
 ## TODO: implement rule [neighboor]
 def west_trading_post(player_state, game_state):
+    east_trading_post_card = "East Trading Post"
+    marketplace_card = "Marketplace"
+
+    east_trading_post_card = find_card(player_state, east_trading_post_card)
+    marketplace_card = find_card(player_state, marketplace_card)
+
+    count_trading_post = qt_trading_post(player_state)
+
+    # Wonder: EPHESOS B(11) regular supply of money
+    if player_state["wonder_id"] == 11:
+        return 3
+
+    # Wonder: ALEXANDRIA B(12)
+    if player_state["wonder_id"] == 12:
+        if east_trading_post_card & marketplace_card:
+            return 1
+        elif east_trading_post_card | marketplace_card:
+            return 4
+        else:
+            return 4
+
+    # Wonder: GIZA B(7)
+    if player_state["wonder_id"] == 7:
+        if count_trading_post < 1:
+            return 4
+
+    # Wonder:  OLYMPIA A(2) Trading Post continues a good card for military because you need a lot of brown resources
+    if player_state["wonder_id"] == 2:
+        return 4
+
+    # Wonder: HALIKARNASSOS B(13) Pick the Trading Post is never a bad move
+    if player_state["wonder_id"] == 13:
+        return 4
+
     return 1
 
 
-## TODO: implement rule of WONDERS
 def marketplace(player_state, game_state):
+    east_trading_post_card = "East Trading Post"
+    west_trading_post_card = "West Trading Post"
+
+    east_trading_post_card = find_card(player_state, east_trading_post_card)
+    west_trading_post_card = find_card(player_state, west_trading_post_card)
+
+    # Wonder: ALEXANDRIA B(12)
+    if player_state["wonder_id"] == 12:
+        if east_trading_post_card & west_trading_post_card:
+            return 1
+        elif east_trading_post_card | west_trading_post_card:
+            return 4
+        else:
+            return 4
+
     return 4
 
 
-## TODO: implement rule of WONDERS
 def forum(player_state, game_state):
     is_in_hand = find_card(player_state, "Marketplace")
     glass = player_state["resources"]["glass"]
     loom = player_state["resources"]["loom"]
+    amount_clay = player_state["resources"]["clay"]
+
+    count_trading_post = qt_trading_post(player_state)
+
+    # Wonder: EPHESOS B(11)
+    if player_state["wonder_id"] == 11:
+        if count_trading_post > 0 | amount_clay >= 2:
+            return 5
+        else:
+            return 2
+
+    # Wonder: GIZA B(7)
+    if player_state["wonder_id"] == 7:
+        if count_trading_post > 0:
+            return 5
 
     if (not is_in_hand) & (glass < 1) & (loom < 1):
         return 4
@@ -560,27 +655,27 @@ def forum(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def caravansery(player_state, game_state):
     return 5
 
 
-## TODO: implement rule of WONDERS
 ## TODO: implement rule [neighboor]
 def vineyard(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
 ## TODO: implement rule [neighboor]
 def bazar(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def haven(player_state, game_state):
     amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
                           + player_state["resources"]["wood"] + player_state["resources"]["stone"]
+
+    # Wonder: GIZA B(7) Just be sure you can pay for Textile to play the Haven
+    if player_state["wonder_id"] == 7:
+        return 4
 
     if amount_raw_material >= 4:
         return 3
@@ -588,7 +683,6 @@ def haven(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def lighthouse(player_state, game_state):
     amound_of_commercial_structure = qt_commercial_structure(player_state)
 
@@ -598,7 +692,6 @@ def lighthouse(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def chamber_of_commerce(player_state, game_state):
     amount_manufacture_good = player_state["resources"]["papyrus"] + player_state["resources"]["loom"] \
                               + player_state["resources"]["glass"]
@@ -609,7 +702,6 @@ def chamber_of_commerce(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def arena(player_state, game_state):
     coins = player_state["resources"]["papyrus"]
     wonder_stage = player_state["wonder_stage"]
