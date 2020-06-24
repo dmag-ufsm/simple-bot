@@ -20,18 +20,35 @@ def find_card(player_state, card):
     return is_in_hand
 
 
-def qt_civilian_structure(player_state):
+def count_cards_played_matchs(player_state, type):
     size = len(player_state["cards_played"])
-    count_civilian_structure = 0
+    count = 0
+
+    for i in range(size):
+        for j in range(len(type)):
+            if player_state["cards_played"][i] == type[j]:
+                count += 1
+
+    return count
+
+
+def qt_civilian_structure(player_state):
     civilian_structure = ["Altar", "Theater", "Pawnshop", "Baths", "Temple", "Courthouse", "Statue", "Aqueduct",
                           "Gardens", "Town Hall", "Senate", "Pantheon", "Palace"]
 
-    for i in range(size):
-        for j in range(len(civilian_structure)):
-            if player_state["cards_played"][i] == civilian_structure[j]:
-                count_civilian_structure += 1
+    count_civilian_structure = count_cards_played_matchs(player_state, civilian_structure)
 
     return count_civilian_structure
+
+
+def qt_commercial_structure(player_state):
+    commercial_structure = ["Tavern", "East Trading Post", "West Trading Post", "Marketplace", "Forum", "Caravansery",
+                            "Vineyard", "Bazar",
+                            "Haven", "Lighthouse", "Chamber of Commerce", "Arena"]
+
+    count_commercial_structure = count_cards_played_matchs(player_state, commercial_structure)
+
+    return count_commercial_structure
 
 
 # rule for lumber_yard card
@@ -282,12 +299,12 @@ def tavern(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule [neighboor]
 def east_trading_post(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule [neighboor]
 def west_trading_post(player_state, game_state):
     return 1
 
@@ -310,38 +327,56 @@ def forum(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
 def caravansery(player_state, game_state):
-    return 1
+    return 5
 
 
-## TODO: implement rule
+## TODO: implement rule [neighboor]
 def vineyard(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule [neighboor]
 def bazar(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
 def haven(player_state, game_state):
+    amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
+                          + player_state["resources"]["wood"] + player_state["resources"]["stone"]
+
+    if amount_raw_material >= 4:
+        return 3
+
     return 1
 
 
-## TODO: implement rule
 def lighthouse(player_state, game_state):
+    amound_of_commercial_structure = qt_commercial_structure(player_state)
+
+    if amound_of_commercial_structure >= 4:
+        return 3
+
     return 1
 
 
-## TODO: implement rule
 def chamber_of_commerce(player_state, game_state):
+    amount_manufacture_good = player_state["resources"]["papyrus"] + player_state["resources"]["loom"] \
+                          + player_state["resources"]["glass"]
+
+    if amount_manufacture_good >= 2:
+        return 3
+
     return 1
 
 
-## TODO: implement rule
 def arena(player_state, game_state):
+    coins = player_state["resources"]["papyrus"]
+    wonder_stage = player_state["wonder_stage"]
+
+    if (coins < 3) & (wonder_stage >= 1):
+        return 3
+
     return 1
 
 
