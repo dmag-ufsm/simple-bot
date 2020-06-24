@@ -13,7 +13,7 @@
 def lumber_yard(player_state, game_state):
     amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
                           + player_state["resources"]["wood"] + player_state["resources"]["stone"]
-
+    # Monopoly of wood
     if amount_raw_material < 2:
         return 4
 
@@ -84,6 +84,7 @@ def excavation(player_state, game_state):
 # return weight of card
 def clay_pit(player_state, game_state):
 
+    # starts with Rhodes or Babylon ?
     if game_state["era"] > 1 | (player_state["wonder_id"] == 3 | player_state["wonder_id"] == 10 |
             player_state["wonder_id"] == 1 | player_state["wonder_id"] == 8):
         return 3
@@ -91,122 +92,195 @@ def clay_pit(player_state, game_state):
     return 5
 
 
-## TODO: implement rule
 def timber_yard(player_state, game_state):
+    amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
+                          + player_state["resources"]["wood"] + player_state["resources"]["stone"]
+
+    # starts with Rhodes or Babylon ?
+    if (player_state["wonder_id"] == 4 | player_state["wonder_id"] == 11 |
+            player_state["wonder_id"] == 2 | player_state["wonder_id"] == 9):
+        return 5
+
+    if amount_raw_material < 3:
+        return 3
+
     return 1
 
 
-## TODO: implement rule
 def forest_cave(player_state, game_state):
+    amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
+                          + player_state["resources"]["wood"] + player_state["resources"]["stone"]
+
+    if amount_raw_material < 2:
+        return 3
+
     return 1
 
 
-## TODO: implement rule
 def mine(player_state, game_state):
+    amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
+                          + player_state["resources"]["wood"] + player_state["resources"]["stone"]
+
+    if amount_raw_material < 2:
+        return 3
+
     return 1
 
 
-## TODO: implement rule
 def sawmill(player_state, game_state):
+    amount_wood = player_state["resources"]["wood"]
+
+    if amount_wood < 2:
+        return 2
+
     return 1
 
 
-## TODO: implement rule
 def quarry(player_state, game_state):
-    return 1
+    # Pay attention to this card so you can build Wall
+    return 2
 
 
-## TODO: implement rule
 def brickyard(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
 def foundry(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
 def loom(player_state, game_state):
+    size = len(player_state["cards_hand"])
+    is_in_hand = False
+    card = "Marketplace"
+    glass = player_state["resources"]["glass"]
+    loom = player_state["resources"]["loom"]
+
+    for i in range(size):
+        print(player_state["cards_hand"][i])
+        if player_state["cards_hand"][i] == card:
+            is_in_hand = True
+
+    if (not is_in_hand) & (glass < 1) & (loom < 1):
+        return 4
+
+    if not is_in_hand:
+        return 2
+
     return 1
 
 
-## TODO: implement rule
 def glassworks(player_state, game_state):
+    size = len(player_state["cards_hand"])
+    is_in_hand = False
+    card = "Marketplace"
+    glass = player_state["resources"]["glass"]
+    loom = player_state["resources"]["loom"]
+
+    for i in range(size):
+        print(player_state["cards_hand"][i])
+        if player_state["cards_hand"][i] == card:
+            is_in_hand = True
+
+    if (not is_in_hand) & (glass < 1) & (loom < 1):
+        return 4
+
+    if not is_in_hand:
+        return 2
+
     return 1
 
 
-## TODO: implement rule
 def press(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+def qt_civilian_structure(player_state):
+    size = len(player_state["cards_played"])
+    count_civilian_structure = 0
+    civilian_structure = ["Altar", "Theater", "Pawnshop", "Baths", "Temple", "Courthouse", "Statue", "Aqueduct",
+                          "Gardens", "Town Hall", "Senate", "Pantheon", "Palace"]
+
+    for i in range(size):
+        for j in range(len(civilian_structure)):
+            if player_state["cards_played"][i] == civilian_structure[j]:
+                count_civilian_structure += 1
+
+    return count_civilian_structure
+
+
 def altar(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
 def theater(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
 def pawnshop(player_state, game_state):
-    return 1
+    return 2
 
 
-## TODO: implement rule
 def baths(player_state, game_state):
-    return 1
+    return 2
 
 
-## TODO: implement rule
 def temple(player_state, game_state):
+    count_civilian_structure = qt_civilian_structure(player_state)
+
+    if count_civilian_structure < 2:
+        return 3
+
     return 1
 
 
-## TODO: implement rule
 def courthouse(player_state, game_state):
+    count_civilian_structure = qt_civilian_structure(player_state)
+
+    if count_civilian_structure < 2:
+        return 3
+
     return 1
 
 
-## TODO: implement rule
 def statue(player_state, game_state):
+    count_civilian_structure = qt_civilian_structure(player_state)
+
+    if count_civilian_structure < 2:
+        return 3
+
     return 1
 
 
-## TODO: implement rule
 def aqueduct(player_state, game_state):
+    count_civilian_structure = qt_civilian_structure(player_state)
+
+    if count_civilian_structure < 2:
+        return 3
+
     return 1
 
 
-## TODO: implement rule
 def gardens(player_state, game_state):
-    return 1
+    return 3
 
 
-## TODO: implement rule
 def town_hall(player_state, game_state):
-    return 1
+    return 4
 
 
-## TODO: implement rule
 def senate(player_state, game_state):
-    return 1
+    return 4
 
 
-## TODO: implement rule
 def pantheon(player_state, game_state):
-    return 1
+    return 5
 
 
-## TODO: implement rule
 def palace(player_state, game_state):
-    return 1
+    return 5
 
 
-## TODO: implement rule
 def tavern(player_state, game_state):
     return 1
 
