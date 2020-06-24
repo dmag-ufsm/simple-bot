@@ -351,12 +351,30 @@ def foundry(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def loom(player_state, game_state):
     is_in_hand = find_card(player_state, "Marketplace")
     glass = player_state["resources"]["glass"]
     loom = player_state["resources"]["loom"]
-    amount_ore = player_state["resources"]["ore"]
+
+    # Wonder: EPHESOS B(11)
+    if player_state["wonder_id"] == 11:
+        if loom < 1:
+            return 4
+
+    # Wonder: BABYLON B(8)
+    if player_state["wonder_id"] == 8:
+        if loom < 1:
+            return 3
+
+    # Wonder: RHODOS B(10)
+    if player_state["wonder_id"] == 8:
+        if loom < 1:
+            return 3
+
+    # Wonder:  OLYMPIA A(2) you can get the compass and get a free chain to the red card Stables
+    if player_state["wonder_id"] == 2:
+        if loom < 1:
+            return 4
 
     if (not is_in_hand) & (glass < 1) & (loom < 1):
         return 4
@@ -366,11 +384,30 @@ def loom(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def glassworks(player_state, game_state):
     is_in_hand = find_card(player_state, "Marketplace")
     glass = player_state["resources"]["glass"]
     loom = player_state["resources"]["loom"]
+
+    # Wonder: EPHESOS B(11)
+    if player_state["wonder_id"] == 11:
+        if glass < 1:
+            return 4
+
+    # Wonder: BABYLON B(8)
+    if player_state["wonder_id"] == 8:
+        if glass < 1:
+            return 2
+
+    # Wonder: RHODOS B(10)
+    if player_state["wonder_id"] == 8:
+        if glass < 1:
+            return 3
+
+    # Wonder: HALIKARNASSOS B(13) to build stage && play militar
+    if player_state["wonder_id"] == 13:
+        if glass < 1:
+            return 5
 
     if (not is_in_hand) & (glass < 1) & (loom < 1):
         return 4
@@ -381,8 +418,23 @@ def glassworks(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def press(player_state, game_state):
+    papyrus = player_state["resources"]["papyrus"]
+
+    # Wonder: BABYLON B(8)
+    if player_state["wonder_id"] == 8:
+        if papyrus < 1:
+            return 3
+
+    # Wonder: GIZA B(7) Apart from Paper, you can freely ignore the gray resources and get a lot of brown resources
+    if player_state["wonder_id"] == 7:
+        return 4
+
+    # Wonder: HALIKARNASSOS B(13) build stage
+    if player_state["wonder_id"] == 13:
+        if papyrus < 1:
+            return 4
+
     return 1
 
 
