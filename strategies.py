@@ -43,14 +43,23 @@ def qt_civilian_structure(player_state):
 
 def qt_commercial_structure(player_state):
     commercial_structure = ["Tavern", "East Trading Post", "West Trading Post", "Marketplace", "Forum", "Caravansery",
-                            "Vineyard", "Bazar",
-                            "Haven", "Lighthouse", "Chamber of Commerce", "Arena"]
+                            "Vineyard", "Bazar", "Haven", "Lighthouse", "Chamber of Commerce", "Arena"]
 
     count_commercial_structure = count_cards_played_matchs(player_state, commercial_structure)
 
     return count_commercial_structure
 
 
+def qt_military_structure(player_state):
+    military_structure = ["Stockade", "Barracks", "Guard Tower", "Walls", "Training Ground", "Stables",
+                          "Archery Range", "Fortifications", "Circus", "Arsenal", "Siege Workshop"]
+
+    count_military_structure = count_cards_played_matchs(player_state, military_structure)
+
+    return count_military_structure
+
+
+## TODO: implement rule of WONDERS
 # rule for lumber_yard card
 # return weight of card
 def lumber_yard(player_state, game_state):
@@ -63,6 +72,7 @@ def lumber_yard(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 # rule for stone pit card
 # return weight of card
 def stone_pit(player_state, game_state):
@@ -75,6 +85,7 @@ def stone_pit(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 # rule for clay pool card
 # return weight of card
 def clay_pool(player_state, game_state):
@@ -87,6 +98,7 @@ def clay_pool(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 # rule for ore_vein card
 # return weight of card
 def ore_vein(player_state, game_state):
@@ -99,6 +111,7 @@ def ore_vein(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 # rule for three farm card
 # return weight of card
 def three_farm(player_state, game_state):
@@ -111,6 +124,7 @@ def three_farm(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 # rule for excavation card
 # return weight of card
 def excavation(player_state, game_state):
@@ -123,6 +137,7 @@ def excavation(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 # rule for clay pit card
 # return weight of card
 def clay_pit(player_state, game_state):
@@ -134,6 +149,7 @@ def clay_pit(player_state, game_state):
     return 5
 
 
+## TODO: implement rule of WONDERS
 def timber_yard(player_state, game_state):
     amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
                           + player_state["resources"]["wood"] + player_state["resources"]["stone"]
@@ -149,6 +165,7 @@ def timber_yard(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def forest_cave(player_state, game_state):
     amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
                           + player_state["resources"]["wood"] + player_state["resources"]["stone"]
@@ -159,6 +176,7 @@ def forest_cave(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def mine(player_state, game_state):
     amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
                           + player_state["resources"]["wood"] + player_state["resources"]["stone"]
@@ -169,6 +187,7 @@ def mine(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def sawmill(player_state, game_state):
     amount_wood = player_state["resources"]["wood"]
 
@@ -178,19 +197,23 @@ def sawmill(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def quarry(player_state, game_state):
     # Pay attention to this card so you can build Wall
     return 2
 
 
+## TODO: implement rule of WONDERS
 def brickyard(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def foundry(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def loom(player_state, game_state):
     is_in_hand = find_card(player_state, "Marketplace")
     glass = player_state["resources"]["glass"]
@@ -205,6 +228,7 @@ def loom(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def glassworks(player_state, game_state):
     is_in_hand = find_card(player_state, "Marketplace")
     glass = player_state["resources"]["glass"]
@@ -219,26 +243,32 @@ def glassworks(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def press(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def altar(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def theater(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def pawnshop(player_state, game_state):
     return 2
 
 
+## TODO: implement rule of WONDERS
 def baths(player_state, game_state):
     return 2
 
 
+## TODO: implement rule of WONDERS
 def temple(player_state, game_state):
     count_civilian_structure = qt_civilian_structure(player_state)
 
@@ -248,6 +278,7 @@ def temple(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def courthouse(player_state, game_state):
     count_civilian_structure = qt_civilian_structure(player_state)
 
@@ -257,6 +288,7 @@ def courthouse(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def statue(player_state, game_state):
     count_civilian_structure = qt_civilian_structure(player_state)
 
@@ -266,6 +298,7 @@ def statue(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def aqueduct(player_state, game_state):
     count_civilian_structure = qt_civilian_structure(player_state)
 
@@ -275,44 +308,54 @@ def aqueduct(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def gardens(player_state, game_state):
     return 3
 
 
+## TODO: implement rule of WONDERS
 def town_hall(player_state, game_state):
     return 4
 
 
+## TODO: implement rule of WONDERS
 def senate(player_state, game_state):
     return 4
 
 
+## TODO: implement rule of WONDERS
 def pantheon(player_state, game_state):
     return 5
 
 
+## TODO: implement rule of WONDERS
 def palace(player_state, game_state):
     return 5
 
 
+## TODO: implement rule of WONDERS
 def tavern(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 ## TODO: implement rule [neighboor]
 def east_trading_post(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 ## TODO: implement rule [neighboor]
 def west_trading_post(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def marketplace(player_state, game_state):
     return 4
 
 
+## TODO: implement rule of WONDERS
 def forum(player_state, game_state):
     is_in_hand = find_card(player_state, "Marketplace")
     glass = player_state["resources"]["glass"]
@@ -327,20 +370,24 @@ def forum(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def caravansery(player_state, game_state):
     return 5
 
 
+## TODO: implement rule of WONDERS
 ## TODO: implement rule [neighboor]
 def vineyard(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 ## TODO: implement rule [neighboor]
 def bazar(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def haven(player_state, game_state):
     amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
                           + player_state["resources"]["wood"] + player_state["resources"]["stone"]
@@ -351,6 +398,7 @@ def haven(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def lighthouse(player_state, game_state):
     amound_of_commercial_structure = qt_commercial_structure(player_state)
 
@@ -360,9 +408,10 @@ def lighthouse(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def chamber_of_commerce(player_state, game_state):
     amount_manufacture_good = player_state["resources"]["papyrus"] + player_state["resources"]["loom"] \
-                          + player_state["resources"]["glass"]
+                              + player_state["resources"]["glass"]
 
     if amount_manufacture_good >= 2:
         return 3
@@ -370,6 +419,7 @@ def chamber_of_commerce(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 def arena(player_state, game_state):
     coins = player_state["resources"]["papyrus"]
     wonder_stage = player_state["wonder_stage"]
@@ -380,166 +430,225 @@ def arena(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
 def stockade(player_state, game_state):
+    amound_of_military_cards = qt_military_structure(player_state)
+
+    if amound_of_military_cards < 2:
+        return 4
+    if amound_of_military_cards < 1:
+        return 5
+
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
 def barracks(player_state, game_state):
+    amound_of_military_cards = qt_military_structure(player_state)
+
+    if amound_of_military_cards < 2:
+        return 4
+    if amound_of_military_cards < 1:
+        return 5
+
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
 def guard_tower(player_state, game_state):
+    amound_of_military_cards = qt_military_structure(player_state)
+
+    if amound_of_military_cards < 2:
+        return 4
+    if amound_of_military_cards < 1:
+        return 5
+
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
+## TODO: implement rule [neighboor]
 def walls(player_state, game_state):
+    amound_of_military_cards = qt_military_structure(player_state)
+
+    if amound_of_military_cards < 1:
+        return 4
+
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
+## TODO: implement rule [neighboor]
 def training_ground(player_state, game_state):
+    amound_of_military_cards = qt_military_structure(player_state)
+
+    if amound_of_military_cards < 1:
+        return 4
+
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
+## TODO: implement rule [neighboor]
 def stables(player_state, game_state):
+    amound_of_military_cards = qt_military_structure(player_state)
+
+    if amound_of_military_cards < 1:
+        return 4
+
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
+## TODO: implement rule [neighboor]
 def archery_range(player_state, game_state):
+    amound_of_military_cards = qt_military_structure(player_state)
+
+    if amound_of_military_cards < 1:
+        return 4
+
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
+## TODO: implement rule [neighboor]
 def fortifications(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
+## TODO: implement rule [neighboor]
 def circus(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
+## TODO: implement rule [neighboor]
 def arsenal(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
+## TODO: implement rule [neighboor]
 def siege_workshop(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
 def apothecary(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
 def workshop(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
 def scriptorium(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
 def dispensary(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
 def laboratory(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
 def library(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
 def school(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
 def lodge(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
 def observatory(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
 def university(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
 def academy(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+## TODO: implement rule of WONDERS
 def study(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 ## TODO: implement rule
 def workers_guild(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 ## TODO: implement rule
 def craftsmens_guild(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 ## TODO: implement rule
 def traders_guild(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 ## TODO: implement rule
 def philosophers_guild(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 ## TODO: implement rule
 def spies_guild(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 ## TODO: implement rule
 def magistrates_guild(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 ## TODO: implement rule
 def shipowners_guild(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 ## TODO: implement rule
 def strategists_guild(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 ## TODO: implement rule
 def scientists_guild(player_state, game_state):
     return 1
 
 
+## TODO: implement rule of WONDERS
 ## TODO: implement rule
 def builders_guild(player_state, game_state):
     return 1
