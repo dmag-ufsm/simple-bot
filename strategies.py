@@ -58,6 +58,15 @@ def qt_military_structure(player_state):
     return count_military_structure
 
 
+def qt_scientific_structure(player_state):
+    scientific_structure = ["Apothecary", "Workshop", "Scriptorium", "Dispensary", "Laboratory", "Library",
+                            "School", "Lodge", "Observatory", "University", "Academy", "Study"]
+
+    count_scientific_structure = count_cards_played_matchs(player_state, scientific_structure)
+
+    return count_scientific_structure
+
+
 def qt_trading_post(player_state):
     east_trading_post_card = "East Trading Post"
     west_trading_post_card = "West Trading Post"
@@ -712,7 +721,6 @@ def arena(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def stockade(player_state, game_state, neighbors):
     amound_of_military_cards = qt_military_structure(player_state)
 
@@ -724,7 +732,6 @@ def stockade(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def barracks(player_state, game_state, neighbors):
     amound_of_military_cards = qt_military_structure(player_state)
 
@@ -736,7 +743,6 @@ def barracks(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def guard_tower(player_state, game_state, neighbors):
     amound_of_military_cards = qt_military_structure(player_state)
 
@@ -748,7 +754,6 @@ def guard_tower(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
 ## TODO: implement rule [neighboor]
 def walls(player_state, game_state, neighbors):
     amound_of_military_cards = qt_military_structure(player_state)
@@ -759,7 +764,6 @@ def walls(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
 ## TODO: implement rule [neighboor]
 def training_ground(player_state, game_state, neighbors):
     amound_of_military_cards = qt_military_structure(player_state)
@@ -770,7 +774,6 @@ def training_ground(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
 ## TODO: implement rule [neighboor]
 def stables(player_state, game_state, neighbors):
     amound_of_military_cards = qt_military_structure(player_state)
@@ -781,7 +784,6 @@ def stables(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
 ## TODO: implement rule [neighboor]
 def archery_range(player_state, game_state, neighbors):
     amound_of_military_cards = qt_military_structure(player_state)
@@ -792,146 +794,161 @@ def archery_range(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
 ## TODO: implement rule [neighboor]
 def fortifications(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
 ## TODO: implement rule [neighboor]
 def circus(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
 ## TODO: implement rule [neighboor]
 def arsenal(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
 ## TODO: implement rule [neighboor]
 def siege_workshop(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def apothecary(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def workshop(player_state, game_state, neighbors):
+    # Wonder: EPHESOS B(11)
+    if player_state["wonder_id"] == 11:
+        return 2
+
     return 1
 
 
-## TODO: implement rule of WONDERS
 def scriptorium(player_state, game_state, neighbors):
+    # Wonder: EPHESOS B(11) free Tablet
+    if player_state["wonder_id"] == 11:
+        return 5
+
     return 1
 
 
-## TODO: implement rule of WONDERS
 def dispensary(player_state, game_state, neighbors):
+    amount_ore = player_state["resources"]["ore"]
+    amount_glass = player_state["resources"]["glass"]
+    amount_scientific_structure = qt_scientific_structure(player_state)
+
+    # Wonder: EPHESOS B(11) free Tablet
+    if player_state["wonder_id"] == 11:
+        if (amount_ore >= 2) & amount_glass & (amount_scientific_structure < 3):
+            return 2
+
     return 1
 
 
-## TODO: implement rule of WONDERS
 def laboratory(player_state, game_state, neighbors):
+    amount_ore = player_state["resources"]["ore"]
+    amount_scientific_structure = qt_scientific_structure(player_state)
+
+    # Wonder: EPHESOS B(11) free Tablet
+    if player_state["wonder_id"] == 11:
+        if (amount_ore >= 2) & (amount_scientific_structure < 3):
+            return 3
+        else:
+            return 2
+
     return 1
 
 
-## TODO: implement rule of WONDERS
 def library(player_state, game_state, neighbors):
+    amount_stone = player_state["resources"]["stone"]
+
+    # Wonder: HALIKARNASSOS B(13)
+    if player_state["wonder_id"] == 13:
+        if amount_stone >= 2:
+            return 5
+
     return 1
 
 
-## TODO: implement rule of WONDERS
 def school(player_state, game_state, neighbors):
+    amount_scientific_structure = qt_scientific_structure(player_state)
+
+    # Wonder: EPHESOS B(11) free Tablet
+    if player_state["wonder_id"] == 11:
+        if amount_scientific_structure < 2:
+            return 2
+
     return 1
 
 
-## TODO: implement rule of WONDERS
 def lodge(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def observatory(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def university(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def academy(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def study(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
-## TODO: implement rule
 def workers_guild(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
-## TODO: implement rule
 def craftsmens_guild(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
-## TODO: implement rule
 def traders_guild(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
-## TODO: implement rule
 def philosophers_guild(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
-## TODO: implement rule
 def spies_guild(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
-## TODO: implement rule
 def magistrates_guild(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
-## TODO: implement rule
 def shipowners_guild(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS
-## TODO: implement rule
 def strategists_guild(player_state, game_state, neighbors):
+    # Wonder: RHODOS B(10) allows to try to pick some cards like: Wall | Tablet | Compass
+    if player_state["wonder_id"] == 8:
+        return 5
     return 1
 
 
-## TODO: implement rule of WONDERS
-## TODO: implement rule
 def scientists_guild(player_state, game_state, neighbors):
+    coins = player_state["resources"]["coins"]
+
+    # Wonder: EPHESOS B(11) free Tablet
+    if player_state["wonder_id"] == 11:
+        if coins >= 2:
+            return 4
+
     return 1
 
 
-## TODO: implement rule of WONDERS
-## TODO: implement rule
 def builders_guild(player_state, game_state, neighbors):
     return 1
 
