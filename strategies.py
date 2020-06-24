@@ -59,12 +59,22 @@ def qt_military_structure(player_state):
     return count_military_structure
 
 
-## TODO: implement rule of WONDERS
-# rule for lumber_yard card
-# return weight of card
 def lumber_yard(player_state, game_state):
     amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
                           + player_state["resources"]["wood"] + player_state["resources"]["stone"]
+
+    # Wonder: ALEXANDRIA B(12) Is important to play 1 Wood card and unlock the first stage
+    if player_state["wonder_id"] == 12:
+        return 4
+
+    # Wonder: GIZA B(7) unlock the 1st stage
+    if player_state["wonder_id"] == 7:
+        return 4
+
+    # Wonder:  OLYMPIA A(2) build your 1st stage
+    if player_state["wonder_id"] == 2:
+        return 5
+
     # Monopoly of wood
     if amount_raw_material < 2:
         return 4
@@ -72,25 +82,46 @@ def lumber_yard(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
-# rule for stone pit card
-# return weight of card
+## TODO: implement rule of WONDERS [Neighboor in rhodes]
 def stone_pit(player_state, game_state):
     amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
                           + player_state["resources"]["wood"] + player_state["resources"]["stone"]
 
+    # Wonder: GIZA B(7) unlock the 2nd stage
+    if player_state["wonder_id"] == 7:
+        return 3
+
+    # Wonder:  OLYMPIA A(2) build the 2nd stage
+    if player_state["wonder_id"] == 2:
+        return 4
+
     if amount_raw_material < 2:
         return 3
 
     return 1
 
 
-## TODO: implement rule of WONDERS
-# rule for clay pool card
-# return weight of card
 def clay_pool(player_state, game_state):
     amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
                           + player_state["resources"]["wood"] + player_state["resources"]["stone"]
+    clay = player_state["resources"]["clay"]
+
+    # Wonder: ALEXANDRIA B(12) Is important to play 1 Clay card and unlock the first stage
+    if player_state["wonder_id"] == 12:
+        return 4
+
+    # Wonder: BABYLON B(8)
+    if player_state["wonder_id"] == 8:
+        if clay < 2:
+            return 3
+
+    # Wonder: GIZA B(7) unlock the 3rd stage
+    if player_state["wonder_id"] == 7:
+        return 2
+
+    # Wonder: HALIKARNASSOS B(13) unlock your 2nd stage
+    if player_state["wonder_id"] == 13:
+        return 4
 
     if amount_raw_material < 2:
         return 3
@@ -98,35 +129,38 @@ def clay_pool(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
-# rule for ore_vein card
-# return weight of card
 def ore_vein(player_state, game_state):
     amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
                           + player_state["resources"]["wood"] + player_state["resources"]["stone"]
 
+    # Wonder: OLYMPIA A(2) build the 3rd stage
+    if player_state["wonder_id"] == 2:
+        return 3
+
+    # Wonder: HALIKARNASSOS B(13) unlock your 1nd stage
+    if player_state["wonder_id"] == 13:
+        return 3
+
     if amount_raw_material < 2:
         return 3
 
     return 1
 
 
-## TODO: implement rule of WONDERS
-# rule for three farm card
-# return weight of card
 def three_farm(player_state, game_state):
     amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
                           + player_state["resources"]["wood"] + player_state["resources"]["stone"]
 
+    # Wonder: GIZA B(7) unlock 2 stages of your wonder
+    if player_state["wonder_id"] == 7:
+        return 5
+
     if amount_raw_material < 2:
         return 3
 
     return 1
 
 
-## TODO: implement rule of WONDERS
-# rule for excavation card
-# return weight of card
 def excavation(player_state, game_state):
     amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
                           + player_state["resources"]["wood"] + player_state["resources"]["stone"]
@@ -137,10 +171,18 @@ def excavation(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
-# rule for clay pit card
-# return weight of card
 def clay_pit(player_state, game_state):
+    clay = player_state["resources"]["clay"]
+
+    # Wonder: BABYLON B(8)
+    if player_state["wonder_id"] == 8:
+        if clay < 2:
+            return 3
+
+    # Wonder: HALIKARNASSOS B(13) you need both resources to build your stages
+    if player_state["wonder_id"] == 13:
+        return 5
+
     # starts with Rhodes or Babylon ?
     if game_state["era"] > 1 | (player_state["wonder_id"] == 3 | player_state["wonder_id"] == 10 |
                                 player_state["wonder_id"] == 1 | player_state["wonder_id"] == 8):
@@ -149,14 +191,13 @@ def clay_pit(player_state, game_state):
     return 5
 
 
-## TODO: implement rule of WONDERS
 def timber_yard(player_state, game_state):
     amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
                           + player_state["resources"]["wood"] + player_state["resources"]["stone"]
 
     # starts with Rhodes or Babylon ?
-    if (player_state["wonder_id"] == 4 | player_state["wonder_id"] == 11 |
-            player_state["wonder_id"] == 2 | player_state["wonder_id"] == 9):
+    if (player_state["wonder_id"] == 3 | player_state["wonder_id"] == 10 |
+            player_state["wonder_id"] == 1 | player_state["wonder_id"] == 8):
         return 5
 
     if amount_raw_material < 3:
@@ -165,7 +206,6 @@ def timber_yard(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def forest_cave(player_state, game_state):
     amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
                           + player_state["resources"]["wood"] + player_state["resources"]["stone"]
@@ -176,7 +216,6 @@ def forest_cave(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def mine(player_state, game_state):
     amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
                           + player_state["resources"]["wood"] + player_state["resources"]["stone"]
@@ -187,9 +226,34 @@ def mine(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
+## TODO: implement rule of WONDERS [Neighboor in olympia]
 def sawmill(player_state, game_state):
     amount_wood = player_state["resources"]["wood"]
+
+    # Wonder: EPHESOS B(11) monopoly of wood
+    if player_state["wonder_id"] == 11:
+        return 2
+
+    # Wonder: ALEXANDRIA B(12) Is important to play 1 Clay card and unlock the first stage
+    if player_state["wonder_id"] == 12:
+        if amount_wood < 1:
+            return 4
+        else:
+            return 2
+
+    # Wonder: BABYLON B(8) your 2nd wonder needs and you can do the monopoly
+    if player_state["wonder_id"] == 8:
+        return 4
+
+    # Wonder: GIZA B(7) unlock the 3rd stage
+    if player_state["wonder_id"] == 7:
+        if amount_wood < 1:
+            return 5
+
+    # Wonder:  OLYMPIA A(2)
+    if player_state["wonder_id"] == 2:
+        if amount_wood < 2:
+            return 3
 
     if amount_wood < 2:
         return 2
@@ -197,19 +261,79 @@ def sawmill(player_state, game_state):
     return 1
 
 
-## TODO: implement rule of WONDERS
 def quarry(player_state, game_state):
+    amount_stone = player_state["resources"]["stone"]
+
+    # Wonder: ALEXANDRIA B(12) Is important to play 1 Clay card and unlock the first stage
+    if player_state["wonder_id"] == 12:
+        return 4
+
+    # Wonder: BABYLON B(8) allows to try to pick some cards like: Wall | Tablet | Compass
+    if player_state["wonder_id"] == 8:
+        return 3
+
+    # Wonder: RHODOS B(10) allows to try to pick some cards like: Wall | Tablet | Compass
+    if player_state["wonder_id"] == 8:
+        return 5
+
+    # Wonder: GIZA B(7) unlock the 3rd stage
+    if player_state["wonder_id"] == 7:
+        if amount_stone < 2:
+            return 3
+        elif amount_stone < 1:
+            return 4
+
+    # Wonder:  OLYMPIA A(2)
+    if player_state["wonder_id"] == 2:
+        if amount_stone < 2:
+            return 4
+
+    # Wonder: HALIKARNASSOS B(13) unlock your 1nd stage
+    if player_state["wonder_id"] == 13:
+        return 3
+
     # Pay attention to this card so you can build Wall
     return 2
 
 
-## TODO: implement rule of WONDERS
 def brickyard(player_state, game_state):
+    amount_clay = player_state["resources"]["clay"]
+
+    # Wonder: EPHESOS B(11) gives you: Gear | Forum for free.
+    if player_state["wonder_id"] == 11:
+        return 3
+
+    # Wonder: BABYLON B(8) allows to try to pick some cards like: Wall | Tablet | Compass
+    if player_state["wonder_id"] == 8:
+        if amount_clay < 2:
+            return 3
+
+    # Wonder: GIZA B(7) unlock the 3rd stage
+    if player_state["wonder_id"] == 7:
+        if amount_clay < 2:
+            return 2
+        elif amount_clay < 1:
+            return 3
+
+    # Wonder: HALIKARNASSOS B(13) unlock your 1nd stage
+    if player_state["wonder_id"] == 13:
+        if amount_clay < 2:
+            return 4
+        elif amount_clay < 1:
+            return 5
+
     return 1
 
 
-## TODO: implement rule of WONDERS
 def foundry(player_state, game_state):
+    # Wonder: EPHESOS B(11) links very well with: Compass | Theater | Hero guild.
+    if player_state["wonder_id"] == 11:
+        return 3
+
+    # Wonder: RHODOS B(10) you need 4x ore to build your 2nd stage
+    if player_state["wonder_id"] == 8:
+        return 4
+
     return 1
 
 
@@ -218,11 +342,11 @@ def loom(player_state, game_state):
     is_in_hand = find_card(player_state, "Marketplace")
     glass = player_state["resources"]["glass"]
     loom = player_state["resources"]["loom"]
+    amount_ore = player_state["resources"]["ore"]
 
     if (not is_in_hand) & (glass < 1) & (loom < 1):
         return 4
-
-    if not is_in_hand:
+    elif not is_in_hand:
         return 2
 
     return 1
