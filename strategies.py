@@ -326,6 +326,8 @@ def brickyard(player_state, game_state):
 
 
 def foundry(player_state, game_state):
+    amount_ore = player_state["resources"]["ore"]
+
     # Wonder: EPHESOS B(11) links very well with: Compass | Theater | Hero guild.
     if player_state["wonder_id"] == 11:
         return 3
@@ -333,6 +335,18 @@ def foundry(player_state, game_state):
     # Wonder: RHODOS B(10) you need 4x ore to build your 2nd stage
     if player_state["wonder_id"] == 8:
         return 4
+
+    # Wonder:  OLYMPIA A(2)
+    if player_state["wonder_id"] == 2:
+        if amount_ore < 2:
+            return 4
+
+    # Wonder: HALIKARNASSOS B(13)
+    if player_state["wonder_id"] == 13:
+        if amount_ore < 2:
+            return 2
+        elif amount_ore < 1:
+            return 5
 
     return 1
 
