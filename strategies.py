@@ -2,10 +2,36 @@
     RULES FOR ALL CARDS CONSIDERING A MILITARY STRATEGY
 '''
 
+
 ## ==========    WONDER IDS ==============================
 # ( A, B) = GIZA(0, 7), BABYLON(1, 8), OLYMPIA(2, 9), RHODOS(3, 10), EPHESOS(4, 11), ALEXANDRIA(5, 12),
 # HALIKARNASSOS(6, 13)
 ## ==================================================================
+
+def find_card(player_state, card):
+    size = len(player_state["cards_hand"])
+    is_in_hand = False
+
+    for i in range(size):
+        print(player_state["cards_hand"][i])
+        if player_state["cards_hand"][i] == card:
+            is_in_hand = True
+
+    return is_in_hand
+
+
+def qt_civilian_structure(player_state):
+    size = len(player_state["cards_played"])
+    count_civilian_structure = 0
+    civilian_structure = ["Altar", "Theater", "Pawnshop", "Baths", "Temple", "Courthouse", "Statue", "Aqueduct",
+                          "Gardens", "Town Hall", "Senate", "Pantheon", "Palace"]
+
+    for i in range(size):
+        for j in range(len(civilian_structure)):
+            if player_state["cards_played"][i] == civilian_structure[j]:
+                count_civilian_structure += 1
+
+    return count_civilian_structure
 
 
 # rule for lumber_yard card
@@ -83,10 +109,9 @@ def excavation(player_state, game_state):
 # rule for clay pit card
 # return weight of card
 def clay_pit(player_state, game_state):
-
     # starts with Rhodes or Babylon ?
     if game_state["era"] > 1 | (player_state["wonder_id"] == 3 | player_state["wonder_id"] == 10 |
-            player_state["wonder_id"] == 1 | player_state["wonder_id"] == 8):
+                                player_state["wonder_id"] == 1 | player_state["wonder_id"] == 8):
         return 3
 
     return 5
@@ -150,16 +175,9 @@ def foundry(player_state, game_state):
 
 
 def loom(player_state, game_state):
-    size = len(player_state["cards_hand"])
-    is_in_hand = False
-    card = "Marketplace"
+    is_in_hand = find_card(player_state, "Marketplace")
     glass = player_state["resources"]["glass"]
     loom = player_state["resources"]["loom"]
-
-    for i in range(size):
-        print(player_state["cards_hand"][i])
-        if player_state["cards_hand"][i] == card:
-            is_in_hand = True
 
     if (not is_in_hand) & (glass < 1) & (loom < 1):
         return 4
@@ -171,16 +189,9 @@ def loom(player_state, game_state):
 
 
 def glassworks(player_state, game_state):
-    size = len(player_state["cards_hand"])
-    is_in_hand = False
-    card = "Marketplace"
+    is_in_hand = find_card(player_state, "Marketplace")
     glass = player_state["resources"]["glass"]
     loom = player_state["resources"]["loom"]
-
-    for i in range(size):
-        print(player_state["cards_hand"][i])
-        if player_state["cards_hand"][i] == card:
-            is_in_hand = True
 
     if (not is_in_hand) & (glass < 1) & (loom < 1):
         return 4
@@ -193,20 +204,6 @@ def glassworks(player_state, game_state):
 
 def press(player_state, game_state):
     return 1
-
-
-def qt_civilian_structure(player_state):
-    size = len(player_state["cards_played"])
-    count_civilian_structure = 0
-    civilian_structure = ["Altar", "Theater", "Pawnshop", "Baths", "Temple", "Courthouse", "Statue", "Aqueduct",
-                          "Gardens", "Town Hall", "Senate", "Pantheon", "Palace"]
-
-    for i in range(size):
-        for j in range(len(civilian_structure)):
-            if player_state["cards_played"][i] == civilian_structure[j]:
-                count_civilian_structure += 1
-
-    return count_civilian_structure
 
 
 def altar(player_state, game_state):
@@ -292,16 +289,24 @@ def east_trading_post(player_state, game_state):
 
 ## TODO: implement rule
 def west_trading_post(player_state, game_state):
-    return  1
-
-
-## TODO: implement rule
-def marketplace(player_state, game_state):
     return 1
 
 
-## TODO: implement rule
+def marketplace(player_state, game_state):
+    return 4
+
+
 def forum(player_state, game_state):
+    is_in_hand = find_card(player_state, "Marketplace")
+    glass = player_state["resources"]["glass"]
+    loom = player_state["resources"]["loom"]
+
+    if (not is_in_hand) & (glass < 1) & (loom < 1):
+        return 4
+
+    if not is_in_hand:
+        return 2
+
     return 1
 
 
@@ -583,4 +588,3 @@ card_weight_map = {
     '74': scientists_guild,
     '75': builders_guild,
 }
-
