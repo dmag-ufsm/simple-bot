@@ -3,7 +3,8 @@ import random
 import json
 
 
-# return dict with card names and ids
+# returns structure to store player's hand information
+# return type example: { id: 1, card_name: 'Loom', weight: 4, playable: True }
 def get_hand_data(cards, hand, playable_cards):
     card_hand_data = []
 
@@ -25,6 +26,8 @@ def get_hand_data(cards, hand, playable_cards):
     return card_hand_data
 
 
+# check if card is playable
+# return type boolean
 def is_playable(playable_cards, card_name):
     for current_card in playable_cards:
         if card_name == current_card:
@@ -32,16 +35,22 @@ def is_playable(playable_cards, card_name):
     return False
 
 
+# returns void
 def set_cards_weights(hand, game_state, player_state, neighbors):
     for card in hand:
         card["weight"] = strategies.card_weight_map[card["id"]](player_state, game_state, neighbors)
 
 
+# return chosen action and card
+# return type action, card
 def choose_card_action(player_state, card_hand_data):
+
+    # check if can build wonder stage
     if player_state["can_build_wonder"]:
         card_selected = random.choice(card_hand_data)
         return "build_wonder",  card_selected["card_name"]
 
+    # get greatest weight
     highest_weight = max_weight_value(card_hand_data)
 
     # if highest_weight == 0 not have playable cards
@@ -49,6 +58,7 @@ def choose_card_action(player_state, card_hand_data):
         card_selected = random.choice(card_hand_data)
         return "discard", card_selected["card_name"]
 
+    # store cards with greatest weight
     best_cards = []
 
     for card in card_hand_data:
@@ -62,6 +72,8 @@ def choose_card_action(player_state, card_hand_data):
     return "build_structure", best_cards[0]["card_name"]
 
 
+# return the greatest weight found
+# return type number
 def max_weight_value(card_hand_data):
     highest = 0
     for card in card_hand_data:
@@ -70,6 +82,8 @@ def max_weight_value(card_hand_data):
     return highest
 
 
+# write action in json file
+# return type void
 def write_json_action(action, card):
     path = "./actions/player_1.json"
     command_dict = {"command": {"subcommand": action, "argument": card}}
