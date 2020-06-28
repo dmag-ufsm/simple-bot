@@ -68,7 +68,7 @@ card_id,card_name,type,cost,provides,future_free_to,free_with,age,amount / playe
 64,Academy,scientific_structure,3x_Stone_AND_1x_Glass_,1x_Compass,-,School,3,"3,7"
 65,Study,scientific_structure,1x_Wood_AND_1x_Papyrus_AND_1x_Cloth,1x_Gear,- ,School,3,"3,5"
 66,Workers_Guild,guild,1x_Wood_AND_1x_Stone_AND_1x_Clay_AND_2x_Ore,1 Ponto de Vitória por cartas marrons nos vizinhos da esquerda e direita,-,-,3,-
-67,Craftsmens_Guild,guild,2x_Stone_AND_2x_Ore,2 Pontos de Vitória por cartas cinzas nos vizinhos da esquerda e direita,-,-,3,-
+67,Craftmens_Guild,guild,2x_Stone_AND_2x_Ore,2 Pontos de Vitória por cartas cinzas nos vizinhos da esquerda e direita,-,-,3,-
 68,Traders_Guild,guild,1x_Cloth_AND_1x_Papyrus_AND_1x_Glass,1 Ponto de Vitória por cartas amarelas nos vizinhos da esquerda e direita,-,-,3,-
 69,Philosophers_Guild,guild,3x_Clay_AND_1x_Papyrus_AND_1x_Cloth,1 Ponto de Vitória por cartas verdes nos vizinhos da esquerda e direita,-,-,3,-
 70,Spies_Guild,guild,3x_Clay_AND_1x_Glass,1 Ponto de Vitória por cartas vermelhas nos vizinhos da esquerda e direita,-,-,3,-
