@@ -24,7 +24,8 @@ class BotInputHandler(PatternMatchingEventHandler):
     # takes action when game_status.json updated or created
     def process(self, event):
         print(event.src_path, event.event_type)
-        game_state, players_state = read_json('../Game/io/game_status.json')
+        # game_state, players_state = read_json('../Game/io/game_status.json')
+        game_state, players_state = read_json('game_info/game_status.json')
 
         # # calls the bot module to make some action
         bot.play(self.card_data, self.weights_data, game_state, players_state, self.bot_id)

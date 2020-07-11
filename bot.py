@@ -35,8 +35,31 @@ def is_playable(playable_cards, card_name):
     return False
 
 
+def get_neighbors(players_state, player_id):
+    neighbors = []
+    id_player_left = player_id - 1
+    id_player_right = player_id + 1
+
+    if id_player_left < 0:
+        id_player_left = len(players_state) - 1
+
+    if id_player_right > (len(players_state) - 1):
+        id_player_right = 0
+
+    neighbors.append(players_state[str(id_player_left)])
+    neighbors.append(players_state[str(id_player_right)])
+
+    return neighbors
+
+def get_player_state(players_state, player_id):
+    return players_state[str(player_id)]
+
 # returns void
-def set_cards_weights(hand, game_state, player_state, neighbors):
+def set_cards_weights(hand, game_state, players_state, player_id):
+
+    player_state = get_player_state(players_state, player_id)
+    neighbors = get_neighbors(players_state, player_id)
+
     for card in hand:
         card["weight"] = strategies.card_weight_map[card["id"]](player_state, game_state, neighbors)
 
@@ -100,7 +123,7 @@ def play(cards, weights, game_state, players_state, player_id):
     card_hand_data = get_hand_data(cards, players_state[str(player_id)]['cards_hand'],
                                    players_state[str(player_id)]['cards_playable'])
 
-    set_cards_weights(card_hand_data, game_state, players_state[str(player_id)], players_state)
+    set_cards_weights(card_hand_data, game_state, players_state, player_id)
 
     action, card = choose_card_action(players_state[str(player_id)], card_hand_data)
 
