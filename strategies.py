@@ -106,7 +106,6 @@ def lumber_yard(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS [Neighboor in rhodes]
 def stone_pit(player_state, game_state, neighbors):
     amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
                           + player_state["resources"]["wood"] + player_state["resources"]["stone"]
@@ -118,6 +117,14 @@ def stone_pit(player_state, game_state, neighbors):
     # Wonder:  OLYMPIA A(2) build the 2nd stage
     if player_state["wonder_id"] == 2:
         return 4
+
+    # Wonder: RHODOS B(10) neighbors logic
+    # if gizah isn't present
+    if neighbors[0]["wonder_id"] != 7 | neighbors[0]["wonder_id"] != 0 \
+            | neighbors[1]["wonder_id"] != 7 | neighbors[1]["wonder_id"] != 0:
+        return 1
+    else:
+        return 3
 
     if amount_raw_material < 2:
         return 3
@@ -250,7 +257,6 @@ def mine(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS [Neighboor in olympia]
 def sawmill(player_state, game_state, neighbors):
     amount_wood = player_state["resources"]["wood"]
 
@@ -275,9 +281,14 @@ def sawmill(player_state, game_state, neighbors):
             return 5
 
     # Wonder:  OLYMPIA A(2)
-    if player_state["wonder_id"] == 2:
-        if amount_wood < 2:
-            return 3
+    if amount_wood < 2 & (neighbors[0]["resources"]["wood"] == 0 | neighbors[1]["resources"]["wood"] == 0 |player_state["resources"]["coins"] == 0):
+        return 3
+
+    # Wonder: RHODOS B(10) neighbors logic
+    # if gizah isn't present
+    if neighbors[0]["wonder_id"] != 7 | neighbors[0]["wonder_id"] != 0 \
+            | neighbors[1]["wonder_id"] != 7 | neighbors[1]["wonder_id"] != 0:
+        return 5
 
     if amount_wood < 2:
         return 2
