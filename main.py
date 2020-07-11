@@ -12,22 +12,22 @@ from watchdog.observers.polling import PollingObserver as Observer
 from watchdog.events import PatternMatchingEventHandler
 import sys
 
-
 class BotInputHandler(PatternMatchingEventHandler):
-    patterns = ["*/game_status.json"]
+    patterns = [sys.argv[1] + '/game_status.json']
 
-    def __init__(self, cards, weights):
+    def __init__(self, cards, weights, bot_id):
         super().__init__()
         self.card_data = cards
         self.weights_data = weights
+        self.bot_id = bot_id
 
     # takes action when game_status.json updated or created
     def process(self, event):
         print(event.src_path, event.event_type)
-        game_state, players_state = read_json('./game_info/game_status.json')
+        game_state, players_state = read_json('../Game/io/game_status.json')
 
         # # calls the bot module to make some action
-        bot.play(self.card_data, self.weights_data, game_state, players_state, 0)
+        bot.play(self.card_data, self.weights_data, game_state, players_state, self.bot_id)
 
     def on_modified(self, event):
         self.process(event)
@@ -78,9 +78,13 @@ if __name__ == '__main__':
     transform_cards_weight(weight_cards_data)
 
     args = sys.argv[1:]
+    if len(args) != 2:
+        print('$ main.py <pasta io> <bot_id>')
+        sys.exit()
+
     observer = Observer()
     observer.event_queue.maxsize = 0
-    observer.schedule(BotInputHandler(cards_data, weight_cards_data), path=args[0] if args else '.')
+    observer.schedule(BotInputHandler(cards_data, weight_cards_data, int(args[1])), path=args[0] if args else '.')
     observer.start()
 
     # watch for changes in game_status.json

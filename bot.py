@@ -1,7 +1,7 @@
 import strategies
 import random
 import json
-
+import sys
 
 # returns structure to store player's hand information
 # return type example: { id: 1, card_name: 'Loom', weight: 4, playable: True }
@@ -62,7 +62,7 @@ def choose_card_action(player_state, card_hand_data):
     best_cards = []
 
     for card in card_hand_data:
-        if (card["weight"] == highest_weight) & card["playable"]:
+        if (card["weight"] == highest_weight) and card["playable"]:
             best_cards.append(card)
 
     if len(best_cards) > 1:
@@ -77,20 +77,24 @@ def choose_card_action(player_state, card_hand_data):
 def max_weight_value(card_hand_data):
     highest = 0
     for card in card_hand_data:
-        if card["playable"] & card["weight"] >= highest:
+        if card["playable"] and card["weight"] >= highest:
             highest = card["weight"]
     return highest
 
 
 # write action in json file
 # return type void
-def write_json_action(action, card):
-    path = "./actions/player_1.json"
-    command_dict = {"command": {"subcommand": action, "argument": card}}
+
+def write_json_action(action, card, player_id):
+    path = sys.argv[1] + "/player_" + str(player_id + 1) + ".json"
+    command_dict = {"command": {"subcommand": action, "argument": card, "extra": ""}}
     print(command_dict)
     with open(path, "w") as write_file:
         json.dump(command_dict, write_file)
 
+    file_ready = open(sys.argv[1] + "/ready.txt", "a")
+    file_ready.write("ready\n")
+    file_ready.close()
 
 def play(cards, weights, game_state, players_state, player_id):
     card_hand_data = get_hand_data(cards, players_state[str(player_id)]['cards_hand'],
@@ -100,4 +104,4 @@ def play(cards, weights, game_state, players_state, player_id):
 
     action, card = choose_card_action(players_state[str(player_id)], card_hand_data)
 
-    write_json_action(action, card)
+    write_json_action(action, card, player_id)
