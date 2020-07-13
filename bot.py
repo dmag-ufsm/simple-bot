@@ -2,6 +2,9 @@ import strategies
 import random
 import json
 import sys
+import pandas as pd
+from datetime import datetime
+
 
 # returns structure to store player's hand information
 # return type example: { id: 1, card_name: 'Loom', weight: 4, playable: True }
@@ -51,8 +54,10 @@ def get_neighbors(players_state, player_id):
 
     return neighbors
 
+
 def get_player_state(players_state, player_id):
     return players_state[str(player_id)]
+
 
 # returns void
 def set_cards_weights(hand, game_state, players_state, player_id):
@@ -95,6 +100,21 @@ def choose_card_action(player_state, card_hand_data):
     return "build_structure", best_cards[0]["card_name"]
 
 
+def write_log(card_hand_data, action, card, bot_id, path_bot_log):
+    data = {'card_1': '', 'card_2': '', 'card_4': '', 'card_3': '', 'card_4': '', 'card_5': '', 'card_6': '', 'card_7': '', 'card_played': '', 'action': '' }
+
+    for i in range(len(card_hand_data)):
+        card_name = card_hand_data[i]["card_name"]
+        data['card_{}'.format(i + 1)] = card_name
+
+    data['card_played'] = card
+    data['action'] = action
+
+    df = pd.DataFrame([data])
+
+    df.to_csv(path_bot_log, mode='a', header=False, index=False)
+
+
 # return the greatest weight found
 # return type number
 def max_weight_value(card_hand_data):
@@ -119,7 +139,8 @@ def write_json_action(action, card, player_id):
     file_ready.write("ready\n")
     file_ready.close()
 
-def play(cards, weights, game_state, players_state, player_id):
+
+def play(cards, weights, game_state, players_state, player_id, path_bot_log):
     card_hand_data = get_hand_data(cards, players_state[str(player_id)]['cards_hand'],
                                    players_state[str(player_id)]['cards_playable'])
 
@@ -128,3 +149,4 @@ def play(cards, weights, game_state, players_state, player_id):
     action, card = choose_card_action(players_state[str(player_id)], card_hand_data)
 
     write_json_action(action, card, player_id)
+    write_log(card_hand_data, action, card, player_id, path_bot_log)
