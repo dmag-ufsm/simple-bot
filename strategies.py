@@ -83,6 +83,25 @@ def qt_trading_post(player_state):
     return count_trading_post
 
 
+def qt_shields(player_state):
+    military_structure = ["Stockade", "Barracks", "Guard Tower", "Walls", "Training Ground", "Stables",
+                          "Archery Range", "Fortifications", "Circus", "Arsenal", "Siege Workshop"]
+
+    size = len(player_state["cards_played"])
+    count = 0
+
+    for i in range(size):
+        for j in range(len(military_structure)):
+            if player_state["cards_played"][i] == military_structure[j]:
+                if (j == 0) | (j == 1) | (j == 2):
+                    count += 1
+                elif (j == 3) | (j == 4) | (j == 5) | (j == 6):
+                    count += 2
+                else:
+                    count += 3
+    return count
+
+
 def lumber_yard(player_state, game_state, neighbors):
     amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
                           + player_state["resources"]["wood"] + player_state["resources"]["stone"]
@@ -106,7 +125,6 @@ def lumber_yard(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS [Neighboor in rhodes]
 def stone_pit(player_state, game_state, neighbors):
     amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
                           + player_state["resources"]["wood"] + player_state["resources"]["stone"]
@@ -118,6 +136,14 @@ def stone_pit(player_state, game_state, neighbors):
     # Wonder:  OLYMPIA A(2) build the 2nd stage
     if player_state["wonder_id"] == 2:
         return 4
+
+    # Wonder: RHODOS B(10) neighbors logic
+    # if gizah isn't present
+    if neighbors[0]["wonder_id"] != 7 | neighbors[0]["wonder_id"] != 0 \
+            | neighbors[1]["wonder_id"] != 7 | neighbors[1]["wonder_id"] != 0:
+        return 1
+    else:
+        return 3
 
     if amount_raw_material < 2:
         return 3
@@ -250,7 +276,6 @@ def mine(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule of WONDERS [Neighboor in olympia]
 def sawmill(player_state, game_state, neighbors):
     amount_wood = player_state["resources"]["wood"]
 
@@ -275,9 +300,14 @@ def sawmill(player_state, game_state, neighbors):
             return 5
 
     # Wonder:  OLYMPIA A(2)
-    if player_state["wonder_id"] == 2:
-        if amount_wood < 2:
-            return 3
+    if amount_wood < 2 & (neighbors[0]["resources"]["wood"] == 0 | neighbors[1]["resources"]["wood"] == 0 |player_state["resources"]["coins"] == 0):
+        return 3
+
+    # Wonder: RHODOS B(10) neighbors logic
+    # if gizah isn't present
+    if neighbors[0]["wonder_id"] != 7 | neighbors[0]["wonder_id"] != 0 \
+            | neighbors[1]["wonder_id"] != 7 | neighbors[1]["wonder_id"] != 0:
+        return 5
 
     if amount_wood < 2:
         return 2
@@ -538,8 +568,15 @@ def tavern(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule [neighboor]
 def east_trading_post(player_state, game_state, neighbors):
+    amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
+                          + player_state["resources"]["wood"] + player_state["resources"]["stone"]
+    amount_raw_material_right_neighbor = neighbors[1]["resources"]["clay"] + neighbors[1]["resources"]["ore"] + \
+                                         neighbors[1]["resources"]["wood"] + neighbors[1]["resources"]["stone"]
+
+    amount_raw_material_left_neighbor = neighbors[0]["resources"]["clay"] + neighbors[0]["resources"]["ore"] + \
+                                        neighbors[0]["resources"]["wood"] + neighbors[0]["resources"]["stone"]
+
     west_trading_post_card = "West Trading Post"
     marketplace_card = "Marketplace"
 
@@ -547,6 +584,11 @@ def east_trading_post(player_state, game_state, neighbors):
     marketplace_card = find_card(player_state, marketplace_card)
 
     count_trading_post = qt_trading_post(player_state)
+
+    # if you cannot have the brown resources && your neighbor have
+    if (amount_raw_material <= 1) & \
+            (amount_raw_material_right_neighbor > 1 | amount_raw_material_left_neighbor > 1):
+        return 4
 
     # Wonder: EPHESOS B(11) regular supply of money
     if player_state["wonder_id"] == 11:
@@ -577,8 +619,14 @@ def east_trading_post(player_state, game_state, neighbors):
     return 1
 
 
-## TODO: implement rule [neighboor]
 def west_trading_post(player_state, game_state, neighbors):
+    amount_raw_material = player_state["resources"]["clay"] + player_state["resources"]["ore"] \
+                          + player_state["resources"]["wood"] + player_state["resources"]["stone"]
+    amount_raw_material_right_neighbor = neighbors[1]["resources"]["clay"] + neighbors[1]["resources"]["ore"] + \
+                                         neighbors[1]["resources"]["wood"] + neighbors[1]["resources"]["stone"]
+
+    amount_raw_material_left_neighbor = neighbors[0]["resources"]["clay"] + neighbors[0]["resources"]["ore"] + \
+                                        neighbors[0]["resources"]["wood"] + neighbors[0]["resources"]["stone"]
     east_trading_post_card = "East Trading Post"
     marketplace_card = "Marketplace"
 
@@ -586,6 +634,10 @@ def west_trading_post(player_state, game_state, neighbors):
     marketplace_card = find_card(player_state, marketplace_card)
 
     count_trading_post = qt_trading_post(player_state)
+
+    # if you cannot have the brown resources && your neighbor have
+    if (amount_raw_material <= 1) & (amount_raw_material_right_neighbor > 1 | amount_raw_material_left_neighbor > 1):
+        return 4
 
     # Wonder: EPHESOS B(11) regular supply of money
     if player_state["wonder_id"] == 11:
@@ -668,13 +720,40 @@ def caravansery(player_state, game_state, neighbors):
     return 5
 
 
-## TODO: implement rule [neighboor]
 def vineyard(player_state, game_state, neighbors):
+    east_trading_post_card = "East Trading Post"
+    west_trading_post_card = "West Trading Post"
+
+    east_trading_post_card = find_card(player_state, east_trading_post_card)
+    west_trading_post_card = find_card(player_state, west_trading_post_card)
+
+    amount_raw_material_right_neighbor = neighbors[1]["resources"]["clay"] + neighbors[1]["resources"]["ore"] + \
+                                         neighbors[1]["resources"]["wood"] + neighbors[1]["resources"]["stone"]
+
+    amount_raw_material_left_neighbor = neighbors[0]["resources"]["clay"] + neighbors[0]["resources"]["ore"] + \
+                                        neighbors[0]["resources"]["wood"] + neighbors[0]["resources"]["stone"]
+
+    # Trading Post = 1 && neighboor have a lot of raw_material
+    if (east_trading_post_card | west_trading_post_card) & \
+            (amount_raw_material_right_neighbor >= 4 | amount_raw_material_left_neighbor >= 4):
+        return 3
+
     return 1
 
 
-## TODO: implement rule [neighboor]
 def bazar(player_state, game_state, neighbors):
+    amount_manufacture_good = player_state["resources"]["papyrus"] + player_state["resources"]["loom"] + \
+                              player_state["resources"]["glass"]
+    amount_raw_material_right_neighbor = neighbors[1]["resources"]["papyrus"] + neighbors[1]["resources"]["loom"] + \
+                                         neighbors[1]["resources"]["glass"]
+    amount_raw_material_left_neighbor = neighbors[0]["resources"]["papyrus"] + neighbors[0]["resources"]["loom"] + \
+                                        neighbors[0]["resources"]["glass"]
+
+    total_raw_material = amount_manufacture_good + amount_raw_material_right_neighbor + amount_raw_material_left_neighbor
+
+    if total_raw_material >= 4:
+        return 3
+
     return 1
 
 
@@ -693,9 +772,9 @@ def haven(player_state, game_state, neighbors):
 
 
 def lighthouse(player_state, game_state, neighbors):
-    amound_of_commercial_structure = qt_commercial_structure(player_state)
+    amount_of_commercial_structure = qt_commercial_structure(player_state)
 
-    if amound_of_commercial_structure >= 4:
+    if amount_of_commercial_structure >= 4:
         return 3
 
     return 1
@@ -722,95 +801,147 @@ def arena(player_state, game_state, neighbors):
 
 
 def stockade(player_state, game_state, neighbors):
-    amound_of_military_cards = qt_military_structure(player_state)
+    amount_of_military_cards = qt_military_structure(player_state)
 
-    if amound_of_military_cards < 2:
+    if amount_of_military_cards < 2:
         return 4
-    if amound_of_military_cards < 1:
+    if amount_of_military_cards < 1:
         return 5
 
     return 1
 
 
 def barracks(player_state, game_state, neighbors):
-    amound_of_military_cards = qt_military_structure(player_state)
+    amount_of_military_cards = qt_military_structure(player_state)
 
-    if amound_of_military_cards < 2:
+    if amount_of_military_cards < 2:
         return 4
-    if amound_of_military_cards < 1:
+    if amount_of_military_cards < 1:
         return 5
 
     return 1
 
 
 def guard_tower(player_state, game_state, neighbors):
-    amound_of_military_cards = qt_military_structure(player_state)
+    amount_of_military_cards = qt_military_structure(player_state)
 
-    if amound_of_military_cards < 2:
+    if amount_of_military_cards < 2:
         return 4
-    if amound_of_military_cards < 1:
+    if amount_of_military_cards < 1:
         return 5
 
     return 1
 
 
-## TODO: implement rule [neighboor]
 def walls(player_state, game_state, neighbors):
-    amound_of_military_cards = qt_military_structure(player_state)
+    amount_of_military_cards = qt_shields(player_state)
+    amount_military_cards_right_neighbor = qt_shields(neighbors[1])
+    amount_military_cards_left_neighbor = qt_shields(neighbors[0])
 
-    if amound_of_military_cards < 1:
+    # military_structure < 1 || if you aren't the military leader
+    if (amount_of_military_cards < 1) | (amount_military_cards_left_neighbor >= amount_of_military_cards) \
+            | (amount_military_cards_right_neighbor >= amount_of_military_cards):
         return 4
 
     return 1
 
 
-## TODO: implement rule [neighboor]
 def training_ground(player_state, game_state, neighbors):
-    amound_of_military_cards = qt_military_structure(player_state)
+    amount_of_military_cards = qt_shields(player_state)
+    amount_military_cards_right_neighbor = qt_shields(neighbors[1])
+    amount_military_cards_left_neighbor = qt_shields(neighbors[0])
 
-    if amound_of_military_cards < 1:
+    # military_structure < 1 || if you aren't the military leader
+    if (amount_of_military_cards < 1) | (amount_military_cards_left_neighbor >= amount_of_military_cards) \
+            | (amount_military_cards_right_neighbor >= amount_of_military_cards):
         return 4
 
     return 1
 
 
-## TODO: implement rule [neighboor]
 def stables(player_state, game_state, neighbors):
-    amound_of_military_cards = qt_military_structure(player_state)
+    amount_of_military_cards = qt_shields(player_state)
+    amount_military_cards_right_neighbor = qt_shields(neighbors[1])
+    amount_military_cards_left_neighbor = qt_shields(neighbors[0])
 
-    if amound_of_military_cards < 1:
+    # military_structure < 1 || if you aren't the military leader
+    if (amount_of_military_cards < 1) | (amount_military_cards_left_neighbor >= amount_of_military_cards) \
+            | (amount_military_cards_right_neighbor >= amount_of_military_cards):
         return 4
 
     return 1
 
 
-## TODO: implement rule [neighboor]
 def archery_range(player_state, game_state, neighbors):
-    amound_of_military_cards = qt_military_structure(player_state)
+    amount_of_military_cards = qt_shields(player_state)
+    amount_military_cards_right_neighbor = qt_shields(neighbors[1])
+    amount_military_cards_left_neighbor = qt_shields(neighbors[0])
 
-    if amound_of_military_cards < 1:
+    # military_structure < 1 || if you aren't the military leader
+    if (amount_of_military_cards < 1) | (amount_military_cards_left_neighbor >= amount_of_military_cards) \
+            | (amount_military_cards_right_neighbor >= amount_of_military_cards):
         return 4
 
     return 1
 
 
-## TODO: implement rule [neighboor]
 def fortifications(player_state, game_state, neighbors):
+    amount_of_military_cards = qt_shields(player_state)
+    amount_military_cards_right_neighbor = qt_shields(neighbors[1])
+    amount_military_cards_left_neighbor = qt_shields(neighbors[0])
+    my_amount_plus_this_card = amount_of_military_cards + 3
+
+    # you need this card for win?
+    if (amount_of_military_cards < 1) | (amount_military_cards_left_neighbor >= amount_of_military_cards) \
+            | (amount_military_cards_right_neighbor >= amount_of_military_cards):
+        if(my_amount_plus_this_card >= amount_military_cards_left_neighbor) | (my_amount_plus_this_card >= amount_military_cards_right_neighbor):
+            return 4
+
     return 1
 
 
-## TODO: implement rule [neighboor]
 def circus(player_state, game_state, neighbors):
+    amount_of_military_cards = qt_shields(player_state)
+    amount_military_cards_right_neighbor = qt_shields(neighbors[1])
+    amount_military_cards_left_neighbor = qt_shields(neighbors[0])
+    my_amount_plus_this_card = amount_of_military_cards + 3
+
+    # you need this card for win?
+    if (amount_of_military_cards < 1) | (amount_military_cards_left_neighbor >= amount_of_military_cards) \
+            | (amount_military_cards_right_neighbor >= amount_of_military_cards):
+        if(my_amount_plus_this_card >= amount_military_cards_left_neighbor) | (my_amount_plus_this_card >= amount_military_cards_right_neighbor):
+            return 4
+
     return 1
 
 
-## TODO: implement rule [neighboor]
 def arsenal(player_state, game_state, neighbors):
+    amount_of_military_cards = qt_shields(player_state)
+    amount_military_cards_right_neighbor = qt_shields(neighbors[1])
+    amount_military_cards_left_neighbor = qt_shields(neighbors[0])
+    my_amount_plus_this_card = amount_of_military_cards + 3
+
+    # you need this card for win?
+    if (amount_of_military_cards < 1) | (amount_military_cards_left_neighbor >= amount_of_military_cards) \
+            | (amount_military_cards_right_neighbor >= amount_of_military_cards):
+        if(my_amount_plus_this_card >= amount_military_cards_left_neighbor) | (my_amount_plus_this_card >= amount_military_cards_right_neighbor):
+            return 4
+
     return 1
 
 
-## TODO: implement rule [neighboor]
 def siege_workshop(player_state, game_state, neighbors):
+    amount_of_military_cards = qt_shields(player_state)
+    amount_military_cards_right_neighbor = qt_shields(neighbors[1])
+    amount_military_cards_left_neighbor = qt_shields(neighbors[0])
+    my_amount_plus_this_card = amount_of_military_cards + 3
+
+    # you need this card for win?
+    if (amount_of_military_cards < 1) | (amount_military_cards_left_neighbor >= amount_of_military_cards) \
+            | (amount_military_cards_right_neighbor >= amount_of_military_cards):
+        if(my_amount_plus_this_card >= amount_military_cards_left_neighbor) | (my_amount_plus_this_card >= amount_military_cards_right_neighbor):
+            return 4
+
     return 1
 
 
