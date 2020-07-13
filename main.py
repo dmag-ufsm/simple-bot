@@ -54,7 +54,6 @@ def read_json(path):
 def transform_card_names(data):
     cards = data.loc[0: 78, 'card_name']
     for index in range(78):
-        print(cards.loc[index])
         cards.loc[index] = cards.loc[index].replace('_', ' ')
 
 
