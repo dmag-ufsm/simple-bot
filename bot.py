@@ -4,6 +4,7 @@ import json
 import sys
 import pandas as pd
 from datetime import datetime
+import time
 
 
 # returns structure to store player's hand information
@@ -100,8 +101,8 @@ def choose_card_action(player_state, card_hand_data):
     return "build_structure", best_cards[0]["card_name"]
 
 
-def write_log(card_hand_data, action, card, bot_id, path_bot_log):
-    data = {'card_1': '', 'card_2': '', 'card_4': '', 'card_3': '', 'card_4': '', 'card_5': '', 'card_6': '', 'card_7': '', 'card_played': '', 'action': '' }
+def write_log(card_hand_data, action, card, bot_id, path_bot_log, time):
+    data = {'card_1': '', 'card_2': '', 'card_4': '', 'card_3': '', 'card_4': '', 'card_5': '', 'card_6': '', 'card_7': '', 'card_played': '', 'action': '', 'time':''}
 
     for i in range(len(card_hand_data)):
         card_name = card_hand_data[i]["card_name"]
@@ -109,6 +110,7 @@ def write_log(card_hand_data, action, card, bot_id, path_bot_log):
 
     data['card_played'] = card
     data['action'] = action
+    data['time'] = time
 
     df = pd.DataFrame([data])
 
@@ -141,6 +143,8 @@ def write_json_action(action, card, player_id):
 
 
 def play(cards, weights, game_state, players_state, player_id, path_bot_log):
+    start_time = time.time()
+
     card_hand_data = get_hand_data(cards, players_state[str(player_id)]['cards_hand'],
                                    players_state[str(player_id)]['cards_playable'])
 
@@ -149,4 +153,7 @@ def play(cards, weights, game_state, players_state, player_id, path_bot_log):
     action, card = choose_card_action(players_state[str(player_id)], card_hand_data)
 
     write_json_action(action, card, player_id)
-    write_log(card_hand_data, action, card, player_id, path_bot_log)
+
+    end_time = time.time()
+
+    write_log(card_hand_data, action, card, player_id, path_bot_log, (end_time - start_time))
