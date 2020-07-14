@@ -841,7 +841,7 @@ def walls(player_state, game_state, neighbors):
     # military_structure < 1 || if you aren't the military leader
     if (amount_of_military_cards < 1) | (amount_military_cards_left_neighbor >= amount_of_military_cards) \
             | (amount_military_cards_right_neighbor >= amount_of_military_cards):
-        return 4
+        return 5
 
     return 1
 
@@ -854,7 +854,7 @@ def training_ground(player_state, game_state, neighbors):
     # military_structure < 1 || if you aren't the military leader
     if (amount_of_military_cards < 1) | (amount_military_cards_left_neighbor >= amount_of_military_cards) \
             | (amount_military_cards_right_neighbor >= amount_of_military_cards):
-        return 4
+        return 5
 
     return 1
 
@@ -867,7 +867,7 @@ def stables(player_state, game_state, neighbors):
     # military_structure < 1 || if you aren't the military leader
     if (amount_of_military_cards < 1) | (amount_military_cards_left_neighbor >= amount_of_military_cards) \
             | (amount_military_cards_right_neighbor >= amount_of_military_cards):
-        return 4
+        return 5
 
     return 1
 
@@ -880,7 +880,7 @@ def archery_range(player_state, game_state, neighbors):
     # military_structure < 1 || if you aren't the military leader
     if (amount_of_military_cards < 1) | (amount_military_cards_left_neighbor >= amount_of_military_cards) \
             | (amount_military_cards_right_neighbor >= amount_of_military_cards):
-        return 4
+        return 5
 
     return 1
 
@@ -895,7 +895,7 @@ def fortifications(player_state, game_state, neighbors):
     if (amount_of_military_cards < 1) | (amount_military_cards_left_neighbor >= amount_of_military_cards) \
             | (amount_military_cards_right_neighbor >= amount_of_military_cards):
         if(my_amount_plus_this_card >= amount_military_cards_left_neighbor) | (my_amount_plus_this_card >= amount_military_cards_right_neighbor):
-            return 4
+            return 5
 
     return 1
 
@@ -910,7 +910,7 @@ def circus(player_state, game_state, neighbors):
     if (amount_of_military_cards < 1) | (amount_military_cards_left_neighbor >= amount_of_military_cards) \
             | (amount_military_cards_right_neighbor >= amount_of_military_cards):
         if(my_amount_plus_this_card >= amount_military_cards_left_neighbor) | (my_amount_plus_this_card >= amount_military_cards_right_neighbor):
-            return 4
+            return 5
 
     return 1
 
@@ -925,7 +925,7 @@ def arsenal(player_state, game_state, neighbors):
     if (amount_of_military_cards < 1) | (amount_military_cards_left_neighbor >= amount_of_military_cards) \
             | (amount_military_cards_right_neighbor >= amount_of_military_cards):
         if(my_amount_plus_this_card >= amount_military_cards_left_neighbor) | (my_amount_plus_this_card >= amount_military_cards_right_neighbor):
-            return 4
+            return 5
 
     return 1
 
@@ -940,7 +940,7 @@ def siege_workshop(player_state, game_state, neighbors):
     if (amount_of_military_cards < 1) | (amount_military_cards_left_neighbor >= amount_of_military_cards) \
             | (amount_military_cards_right_neighbor >= amount_of_military_cards):
         if(my_amount_plus_this_card >= amount_military_cards_left_neighbor) | (my_amount_plus_this_card >= amount_military_cards_right_neighbor):
-            return 4
+            return 5
 
     return 1
 
