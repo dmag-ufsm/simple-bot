@@ -16,18 +16,29 @@ import sys
 class BotInputHandler(PatternMatchingEventHandler):
     patterns = [sys.argv[1] + '/game_status.json']
 
-    def __init__(self, cards, weights, bot_id, path_bot_log):
+    def __init__(self, cards, weights, bot_id):
         super().__init__()
         self.card_data = cards
         self.weights_data = weights
         self.bot_id = bot_id
-        self.path_bot_log = path_bot_log
+        self.path_bot_log = ''
 
     # takes action when game_status.json updated or created
     def process(self, event):
         print(event.src_path, event.event_type)
         game_state, players_state = read_json('../Game/io/game_status.json')
+        # game_state, players_state = read_json('../Game/build/io/game_status.json')
+
         # game_state, players_state = read_json('game_info/game_status.json')
+
+        if (game_state["era"] == 1) & (game_state["turn"] == 0):
+            # create directory for bot match log
+            dir_path = './match_logs/bot_{}/'.format(self.bot_id + 1)
+            file_name = 'match_{}.csv'.format(datetime.now().strftime("%d-%m-%Y-%H-%M-%S"))
+            empty_csv = pandas.DataFrame(columns=['card_1', 'card_2', 'card_3', 'card_4', 'card_5', 'card_6', 'card_7', 'card_played', 'action', 'time'])
+            empty_csv.to_csv(dir_path + file_name, index=False, header=True)
+            self.path_bot_log = dir_path + file_name
+
 
         # # calls the bot module to make some action
         bot.play(self.card_data, self.weights_data, game_state, players_state, self.bot_id, self.path_bot_log)
@@ -85,16 +96,9 @@ if __name__ == '__main__':
         print('$ main.py <pasta io> <bot_id>')
         sys.exit()
 
-    # create directory for bot match log
-    dir_path = './match_logs/bot_{}/'.format(int(args[1]) + 1)
-    file_name = 'match_{}.csv'.format(datetime.now().strftime("%d-%m-%Y-%H-%M-%S"))
-
-    empty_csv = pandas.DataFrame(columns=['card_1', 'card_2', 'card_3', 'card_4', 'card_5', 'card_6', 'card_7', 'card_played', 'action'])
-    empty_csv.to_csv(dir_path + file_name, index=False, header=True)
-
     observer = Observer()
     observer.event_queue.maxsize = 0
-    observer.schedule(BotInputHandler(cards_data, weight_cards_data, int(args[1]), dir_path + file_name), path=args[0] if args else '.')
+    observer.schedule(BotInputHandler(cards_data, weight_cards_data, int(args[1])), path=args[0] if args else '.')
     observer.start()
 
     # watch for changes in game_status.json
