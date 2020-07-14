@@ -1,3 +1,7 @@
 .idea
 venv
 __pycache__
+play/chromedriver*
+play/game_status.json
+play/player_1.json
+play/ready.txt
