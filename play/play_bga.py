@@ -1,6 +1,9 @@
 # Script para jogar com o bot no BGA
+# Executar bot da pasta anterior:
+# $ python3 main.py play 0
 
 from selenium import webdriver
+from time import sleep
 import bs4
 import json
 import sys
@@ -42,6 +45,7 @@ def get_wonder(parsed_html):
         wonder_stage = len(div_wonder_step_built)
 
     # Se pode jogar estagio da maravilha ou nao
+    can_build_wonder = (False, 0)
     for pbw in div_player_board_wonder:
         if len(pbw) <= 1:
             continue
@@ -102,6 +106,9 @@ def get_hand_cards(parsed_html):
     cards_cantplay = []
 
     for ph in div_player_hand:
+        if not isinstance(ph, bs4.element.Tag):
+            continue
+
         # Pega o nome da carta
         if 'background-position' in ph['style']:
             desl = ph['style'].split('background-position:')[1].split(' ')
@@ -227,12 +234,18 @@ def get_resources(cards_played, wonder_data, coins):
 
     return resources
 
-def Main(num_players):
+def Main():
     browser = webdriver.Chrome(executable_path='./chromedriver')
 
-    try:
-        browser.get('file:///home/bettker/Desktop/Bot%20BGA/htmls/A1.html')
-        parsed_html = bs4.BeautifulSoup(browser.page_source)
+    # try:
+    browser.get('https://boardgamearena.com/')
+
+    num_players = int(input('Number of players: '))
+
+    while True:
+        input()
+
+        parsed_html = bs4.BeautifulSoup(browser.page_source, 'html.parser')
 
         cards_canplay, cards_couldplay, cards_cantplay = get_hand_cards(parsed_html)
         wonders_data, cards_played, coins = get_boards(parsed_html)
@@ -242,15 +255,13 @@ def Main(num_players):
         for i in range(num_players):
             data['players'][str(i)] = {}
 
-            data['players'][str(i)]['can_build_wonder'] = wonders_data[i]['can_build_wonder'][0] != 'cantplay'
+            data['players'][str(i)]['can_build_wonder'] = wonders_data[i]['can_build_wonder'][0] == 'canplay' or wonders_data[i]['can_build_wonder'][0] == 'couldplay'
             data['players'][str(i)]['wonder_id'] = wonders_data[i]['wonder_id']
             data['players'][str(i)]['wonder_name'] = wonders_data[i]['wonder_name']
             data['players'][str(i)]['wonder_stage'] = wonders_data[i]['wonder_stage']
 
             # Se for o jogador, add as cartas canplay e couldplay (pega apenas nome, removendo o campo de custo)
             if i == 0:
-                print(cards_canplay)
-                print(cards_couldplay)
                 cards_playable = cards_canplay
                 for c in cards_couldplay:
                     cards_playable.append(c[0])
@@ -263,15 +274,35 @@ def Main(num_players):
             data['players'][str(i)]['cards_played'] = cards_played[i]
             data['players'][str(i)]['resources'] = get_resources(cards_played[i], wonders_data[i], coins[i])
 
+            # Add o resto desnecessario pra ficar igual o gerado pelo jogo
+            data['game'] = {}
+            data['game']['clockwise'] = ''
+            data['game']['era'] = ''
+            data['game']['turn'] = ''
+
         with open('game_status.json', 'w') as outfile:
             json.dump(data, outfile)
+        
+        # Sleep com tempo suficiente do bot computar e escrever a jogada no arquivo
+        sleep(3)
+        
+        # Descobre a carta a ser jogada...
+        with open('player_1.json') as move_json:
+            move = json.load(move_json)
+            action = move['command']['subcommand']
+            card = move['command']['argument']
 
-    except:
-        e = sys.exc_info()[0]
-        print('Erro: ' + str(e))
+            print(action, 'with', card, end='')
 
-    finally:
-        browser.quit()
+    # except:
+    #     e = sys.exc_info()[0]
+    #     print('Erro: ' + str(e))
+
+    # finally:
+    browser.quit()
 
 if __name__ == '__main__':
-    Main(3)
+    print('Log in and start a match')
+    print('Press Enter each turn to get the move')
+
+    Main()
