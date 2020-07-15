@@ -26,10 +26,9 @@ class BotInputHandler(PatternMatchingEventHandler):
     # takes action when game_status.json updated or created
     def process(self, event):
         print(event.src_path, event.event_type)
-        game_state, players_state = read_json('../Game/io/game_status.json')
-        # game_state, players_state = read_json('../Game/build/io/game_status.json')
+        # game_state, players_state = read_json('../Game/io/game_status.json')
 
-        # game_state, players_state = read_json('game_info/game_status.json')
+        game_state, players_state = read_json(sys.argv[1] + '/game_status.json')
 
         if (game_state["era"] == 1) & (game_state["turn"] == 0):
             # create directory for bot match log

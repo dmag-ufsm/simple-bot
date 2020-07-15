@@ -1,0 +1,18 @@
+resultados 
+benchmark de tempo
+benchmark de vitórias 
+pontuação alcançada - pontuação segundo lugar
+mostrar cenários especificos de decisão
+
+orientação:
+
+testar redes diferentes;
+
+- mlp - já tenho
+- recorrente?
+- lstm?
+
+organizar tempo;
+
+
+

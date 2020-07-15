@@ -1,0 +1,10 @@
+media do maior pontuação: 50.823
+media da menor pontuação: 28.368
+media da maior pontuação militar: 12.166
+media da menor pontuação militar: -1.812
+media da maior quantidade de escudos: 7.123
+media da menor quantidade de escudos: 2.762
+media da pontuação militar dos ganhadores: 9.702
+media da quantidade de escudos dos ganhadores: 6.217
+media da pontuação militar dos perdedores: 0.777
+media da quantidade de escudos dos perdedores: 3.798
