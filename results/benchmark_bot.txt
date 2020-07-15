@@ -1,0 +1,1 @@
+media do tempo de decisão(segundos): 0.004798063302611918 
