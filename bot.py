@@ -133,7 +133,7 @@ def max_weight_value(card_hand_data):
 def write_json_action(action, card, player_id):
     path = sys.argv[1] + "/player_" + str(player_id + 1) + ".json"
     command_dict = {"command": {"subcommand": action, "argument": card, "extra": ""}}
-    print(command_dict)
+    # print(command_dict)
     with open(path, "w") as write_file:
         json.dump(command_dict, write_file)
 
@@ -156,4 +156,4 @@ def play(cards, weights, game_state, players_state, player_id, path_bot_log):
 
     end_time = time.time()
 
-    write_log(card_hand_data, action, card, player_id, path_bot_log, (end_time - start_time))
+    # write_log(card_hand_data, action, card, player_id, path_bot_log, (end_time - start_time))
